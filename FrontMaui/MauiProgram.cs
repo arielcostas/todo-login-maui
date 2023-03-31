@@ -18,6 +18,7 @@ public static class MauiProgram
     }
 }
 
+#nullable enable
 public static class Sesion
 {
     public static string? Token { get; set; }

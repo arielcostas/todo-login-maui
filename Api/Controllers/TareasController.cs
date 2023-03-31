@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using System.Security.Claims;
 
 namespace Api.Controllers;
@@ -104,7 +105,7 @@ public class TareasController : ControllerBase
             return NotFound();
         }
 
-        usuario.Tareas.Remove(tarea);
+        _context.Remove(tarea);
         _context.SaveChanges();
 
         return NoContent();

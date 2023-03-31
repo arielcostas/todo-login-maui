@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls.Platform;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 
@@ -13,32 +14,60 @@ namespace FrontMaui
 
         private async void DoLogin(object sender, EventArgs e)
         {
-            HttpClient client = new HttpClient();
-            var resp = await client.PostAsync(
-                "http://localhost:5072/Auth/Login",
-                JsonContent.Create(new
+            errorDisplay.Text = string.Empty;
+            ActivityIndicator indicator = new()
+            {
+                Color = Colors.Orange,
+                IsRunning = true,
+                IsVisible = true,
+            };
+
+            if (
+                usuarioEntry.Text.Trim() == string.Empty ||
+                contraseñaEntry.Text.Trim() == string.Empty)
+            {
+                errorDisplay.Text = "Debe ingresar usuario y contraseña";
+                return;
+            }
+
+            try
+            {
+                HttpClient client = new HttpClient();
+                var resp = await client.PostAsync(
+                    "http://localhost:5072/Auth/Login",
+                    JsonContent.Create(new
+                    {
+                        id = usuarioEntry.Text,
+                        contraseña = contraseñaEntry.Text
+                    })
+                );
+
+                if (resp.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    id = usuarioEntry.Text,
-                    contraseña = contraseñaEntry.Text
-                })
-            );
+                    throw new Exception("Credenciales incorrectas");
+                }
 
-            if (!resp.IsSuccessStatusCode)
-            {
-                await DisplayAlert("Error", "Usuario o contraseña incorrectos", "OK");
-                return;
+                resp.EnsureSuccessStatusCode();
+
+                var token = await resp.Content.ReadFromJsonAsync<LoginResponse>();
+                if (token == null)
+                {
+                    throw new Exception("No se pudo iniciar sesión: respuesta inesperada");
+                }
+
+                Sesion.Token = token.Token;
+
+                await Shell.Current.GoToAsync("///TareasPage");
             }
-
-            var token = await resp.Content.ReadFromJsonAsync<LoginResponse>();
-            if (token == null)
+            catch (Exception ex)
             {
-                await DisplayAlert("Error", "No se ha podido obtener el token", "OK");
-                return;
+                errorDisplay.Text = ex.Message;
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
             }
-
-            Sesion.Token = token.Token;
-
-            await Shell.Current.GoToAsync("///TareasPage");
+            
+            indicator.IsRunning = false;
+            indicator.IsVisible = false;
         }
     }
 
