@@ -4,10 +4,11 @@
              x:Class="FrontMaui.LoginPage"
              Title="Inicio de sesión">
     <VerticalStackLayout
-        MaximumWidthRequest="200"
+        MaximumWidthRequest="340"
         Spacing="25"
         Padding="30,0"
-        VerticalOptions="Center">
+        VerticalOptions="Start"
+        Margin="15,80,15,0">
 
         <Label
                 Text="Inicia sesión!"
@@ -17,8 +18,8 @@
 
         <Label x:Name="errorDisplay" TextColor="Red" HorizontalOptions="Center" />
 
-        <Entry x:Name="usuarioEntry" Placeholder="Usuario" />
-        <Entry x:Name="contraseñaEntry" Placeholder="Contraseña" IsPassword="True" />
+        <Entry x:Name="usuarioEntry" Placeholder="Usuario" MaximumWidthRequest="250" />
+        <Entry x:Name="contraseñaEntry" Placeholder="Contraseña" IsPassword="True" MaximumWidthRequest="250" />
 
         <Button
                 x:Name="LoginBtn"

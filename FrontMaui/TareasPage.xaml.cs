@@ -14,7 +14,11 @@ public partial class TareasPage : ContentPage
         InitializeComponent();
         Tareas = new();
         BindingContext = this;
-        LoadTareasAsync();
+        
+        _ = LoadTareasAsync();
+
+        btnAgregarTarea.Clicked += async (s, e) => await NuevaTarea();
+        txtNuevaTarea.Completed += async (s, e) => await NuevaTarea();
     }
 
     private async Task LoadTareasAsync()
@@ -34,6 +38,32 @@ public partial class TareasPage : ContentPage
         catch (Exception ex)
         {
             await DisplayAlert(Title, ex.Message, "Ok");
+        }
+    }
+
+    private async Task NuevaTarea()
+    {
+        try
+        {
+            HttpClient cli = new();
+            cli.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Sesion.Token);
+
+            var tareas = await cli.PostAsJsonAsync(
+                "http://localhost:5072/Tareas",
+                new
+                {
+                    titulo = txtNuevaTarea.Text
+                }
+            );
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert(Title, ex.Message, "Ok");
+        }
+        finally
+        {
+            txtNuevaTarea.Text = string.Empty;
+            await LoadTareasAsync();
         }
     }
 }

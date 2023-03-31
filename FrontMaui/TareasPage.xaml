@@ -3,17 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FrontMaui.TareasPage"
              Title="Mis tareas">
-    <ListView ItemsSource="{Binding Tareas}">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <StackLayout Orientation="Horizontal" Spacing="32">
-                        <Label Text="{Binding Titulo}" />
-                        <Switch IsToggled="{Binding Completada}" />
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
-
+    <VerticalStackLayout Margin="10,15,10,0" Spacing="15">
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Entry Placeholder="Nueva tarea" x:Name="txtNuevaTarea" HorizontalOptions="Fill" WidthRequest="240" />
+            <Button x:Name="btnAgregarTarea" Text=" + " />
+        </HorizontalStackLayout>
+        <ListView ItemsSource="{Binding Tareas}" HorizontalOptions="Center">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <HorizontalStackLayout HorizontalOptions="Center">
+                            <Switch IsToggled="{Binding Completada}" />
+                            <Label Text="{Binding Titulo}" VerticalOptions="Center" WidthRequest="240" />
+                        </HorizontalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </VerticalStackLayout>
 </ContentPage>

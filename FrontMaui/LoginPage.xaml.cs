@@ -10,6 +10,9 @@ namespace FrontMaui
         public LoginPage()
         {
             InitializeComponent();
+            usuarioEntry.Focus();
+            usuarioEntry.Completed += (s, e) => contraseñaEntry.Focus();
+            contraseñaEntry.Completed += DoLogin;
         }
 
         private async void DoLogin(object sender, EventArgs e)
